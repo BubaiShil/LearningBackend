@@ -7,6 +7,7 @@ const app = express()
 const port = 4000;
 
 app.get("/api/jokes",(req,res)=>{
+    
     const jokes = [
         {
           id: 1,
@@ -58,7 +59,7 @@ app.get("/api/jokes",(req,res)=>{
           title: "Networking Woes",
           content: "Why do networks never gossip? They prefer to keep things private."
         }
-      ];
+    ];
       
     
       res.send(jokes)
