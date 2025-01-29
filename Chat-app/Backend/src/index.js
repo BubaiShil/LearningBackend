@@ -1,5 +1,6 @@
 import express from "express"
 import dotenv from "dotenv"
+import cookieParser from 'cookie-parser'
 import authRoutes from "./routes/auth.route.js";
 import { DBconnect } from "./lib/db.js";
 
@@ -8,6 +9,7 @@ dotenv.config()
 const port = process.env.PORT
 
 app.use(express.json()) // to get pass,name,email from frontend body
+app.use(cookieParser())
 app.use("/api/auth",authRoutes)
 
 

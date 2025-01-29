@@ -71,7 +71,7 @@ export const login = async (req, res) => {
       profilepic: user.profilepic,
     });
   } catch (error) {
-    console.log("error in sign controller", error);
+    console.log("error in login controller", error);
     res.status(400).json({ message: "internal server error" });
   }
 };
@@ -81,7 +81,11 @@ export const logout = (req, res) => {
     res.cookie("jwt","",{maxAge : 0})
     res.status(200).json({message: "Logged out Sussesfully"})
 } catch (error) {
-    console.log("error in sign controller", error);
+    console.log("error in logout controller", error);
     res.status(400).json({ message: "internal server error" });
   }
 };
+
+export const updateProfile = (req,res) =>{
+    res.send("fddbfb")
+}
