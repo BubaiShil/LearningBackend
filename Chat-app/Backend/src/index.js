@@ -10,7 +10,9 @@ const app = express()
 dotenv.config()
 const port = process.env.PORT
 
-app.use(express.json()) // to get pass,name,email from frontend body
+//app.use(express.json()) 
+app.use(express.json({ limit: "10mb" })); // to get pass,name,email from frontend body
+app.use(express.urlencoded({ limit: "10mb", extended: true }));
 app.use(cookieParser())
 app.use(cors({
     origin : 'http://localhost:5173',
