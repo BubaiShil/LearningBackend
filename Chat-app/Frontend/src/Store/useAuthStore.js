@@ -28,7 +28,7 @@ export const useAuthStore = create((set)=>({
         set({isSignedUp : true})
         try {
             const res = await axiosInstance.post("/auth/signup",data)
-            set({authUser : res.data})
+            set({authUser : res.data})  //data came from backend aftere axios instance post connection to backend
             toast.success("Account Created Sucessfully")
         } catch (error) {
             set({ authUser : null})
