@@ -5,8 +5,9 @@ import cookieParser from 'cookie-parser'
 import authRoutes from "./routes/auth.route.js";
 import messageRoutes from "./routes/message.route.js"
 import { DBconnect } from "./lib/db.js";
+import { app,Server } from "./lib/socket.js";
 
-const app = express()
+//const app = express()
 dotenv.config()
 const port = process.env.PORT
 
@@ -23,7 +24,7 @@ app.use("/api/message",messageRoutes)
 
 
 
-app.listen(port,()=>{
+Server.listen(port,()=>{
     console.log(`SERVER IS RUNNING ON : ${port}`);
     DBconnect()
 })
