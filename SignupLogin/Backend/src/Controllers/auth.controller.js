@@ -1,4 +1,4 @@
-import { getoken } from "../lib/utils.js"
+import { getToken } from "../lib/utils.js"
 import User from "../models/auth.model.js"
 import bcrypt from "bcryptjs"
 
@@ -29,7 +29,7 @@ export const Signup=async(req,res)=>{
         })
 
         if (createUser) {
-            getoken(createUser._id,res)
+          getToken(createUser._id,res)
             await createUser.save()
 
             res.status(201).json({
@@ -67,7 +67,7 @@ export const Login= async(req,res)=>{
         return res.status(400).json({ message: "Invalid Credentials" });
      }
 
-     getoken(user._id,res)
+     getToken(user._id,res)
 
      res.status(200).json({
         _id: user._id,

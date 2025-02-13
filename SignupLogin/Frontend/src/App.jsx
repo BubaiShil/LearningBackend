@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
-import { Route, Routes } from 'react-router-dom'
+import { Toaster } from 'react-hot-toast'
+import {Loader} from 'lucide-react'
+import { Navigate, Route, Routes } from 'react-router-dom'
 import { useAuthStore } from './Store/useAuthStore'
 import Navbar from './Components/Navbar'
 import HomePagee from "./Pages/HomePagee";
@@ -10,8 +10,7 @@ import SignupPagee from "./Pages/SignUpPagee";
 import LoginPagee from "./Pages/LoginPagee";
 
 function App() {
-  const [count, setCount] = useState(0)
-  const {authUser,checkAuth} = useAuthStore()
+  const {authUser,checkAuth,ischeckingAuth} = useAuthStore()
 
   useEffect(()=>{
     checkAuth()
@@ -21,14 +20,24 @@ function App() {
   console.log(authUser);
   
 
+  if (ischeckingAuth && !authUser) 
+    return (
+    <div className="flex items-center justify-center h-screen">
+      <Loader className="size-10 animate-spin" />
+    </div>
+    )
+  
+  
+
   return (
     <>
+     <Toaster position="top-right" />
       <Navbar/>
 
       <Routes>
-        <Route path='/' element={<HomePagee/>}/>
-        <Route path='/signup' element={<SignupPagee/>}/>
-        <Route path='/login' element={<LoginPagee/>}/>
+        <Route path='/' element={authUser ? <HomePagee/> : <Navigate to='/login'/>}/>
+        <Route path='/signup' element={!authUser ? <SignupPagee/> : <Navigate to='/'/>}/>
+        <Route path='/login' element={!authUser ? <LoginPagee/> : <Navigate to='/'/>}/>
         {/* <Route path='/' element={<HomePagee/>}/> */}
       </Routes>
     </>
