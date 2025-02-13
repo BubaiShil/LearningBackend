@@ -1,5 +1,6 @@
 import express from "express";
-import { Login, Logout, Settings, Signup, UpdateProfile } from "../Controllers/auth.controller.js";
+import { checkAuth, Login, Logout, Settings, Signup, UpdateProfile } from "../Controllers/auth.controller.js";
+import { protectRoutess } from "../Middleware/auth.middleware.js";
 
 
 
@@ -9,7 +10,7 @@ router.post("/signup",Signup)
 router.post("/login",Login)
 router.post("/logout",Logout)
 router.post("/settings",Settings)
-router.post("/profileUpdate",UpdateProfile)
+router.post("/check",protectRoutess,checkAuth)
 
 
 export default router;

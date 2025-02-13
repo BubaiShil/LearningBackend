@@ -1,5 +1,5 @@
 import express from "express"
-
+import cookie from 'cookie-parser'
 import authRouter from "./Routes/auth.route.js"
 import dotenv from "dotenv"
 import { connectDBmongo } from "./lib/db.js"
@@ -10,6 +10,7 @@ const app = express()
 const port = process.env.PORT
 
 app.use(express.json())
+app.use(cookie()) ////////////////////////////////////////////
 
 app.use("/api/auth",authRouter)
 
