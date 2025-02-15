@@ -4,7 +4,7 @@ import { useAuthStore } from "../Store/useAuthStore";
 
 const Navbar = () => {
 
-  const {authUser,checkAuth,ischeckingAuth} = useAuthStore()
+  const {authUser,checkAuth,ischeckingAuth,logout} = useAuthStore()
   return (
     <nav className="bg-gray-900 text-white p-4 shadow-md">
       <div className="container mx-auto flex items-center justify-between">
@@ -13,7 +13,7 @@ const Navbar = () => {
 
         {/* Logout Button */}
         {authUser && (
-          <button className="flex items-center gap-2 bg-red-600 px-4 py-2 rounded-lg hover:bg-red-700 transition">
+          <button onClick={logout} className="flex items-center gap-2 bg-red-600 px-4 py-2 rounded-lg hover:bg-red-700 transition">
           <LogOut size={20} />
           Logout
         </button>

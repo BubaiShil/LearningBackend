@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Mail, Lock, User, Eye, EyeOff } from "lucide-react";
+import {Link} from 'react-router-dom'
 import { useAuthStore } from "../Store/useAuthStore";
 import {toast} from "react-hot-toast"
 
@@ -17,7 +18,7 @@ const SignupPagee = () => {
   
 
   const validate = () => {
-    if (!formData.fullname.trim()) return toast.error("Full name is required");
+    if (!formData.fullName.trim()) return toast.error("Full name is required");
     if (!formData.email.trim()) return toast.error("Email is required");
     if (!/\S+@\S+\.\S+/.test(formData.email)) return toast.error("Invalid email format");
     if (!formData.password) return toast.error("Password is required");
@@ -104,6 +105,17 @@ const SignupPagee = () => {
             Sign Up
           </button>
         </form>
+
+
+        {/* Link to login */}
+        <div className="text-center mt-4">
+          <p className="text-gray-600">
+            Already have an account?{" "}
+            <Link to="/login" className="text-blue-600 hover:underline">
+              Login Now
+            </Link>
+          </p>
+        </div>
       </div>
     </div>
   );
