@@ -26,7 +26,7 @@ export const Signup = async (req, res) => {
     });
 
     if (createUser) {
-      getToken();
+      getToken(createUser._id,res);
       await createUser.save();
 
       res.status(201).json({
@@ -71,7 +71,7 @@ export const Login = async (req, res) => {
         .json({ message: "Account does'nt exits with current user" });
     }
 
-    genToken();
+    genToken(user._id,res);
 
     res.status(200).json({
       _id: user._id,

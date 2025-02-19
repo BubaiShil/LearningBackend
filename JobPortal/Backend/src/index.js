@@ -1,6 +1,7 @@
 import express from 'express'
 import cookie from 'cookie-parser'
 import dotenv from 'dotenv'
+import { DBconnect } from './Utils/db.js';
 
 dotenv.config();
 const app = express();
@@ -15,5 +16,5 @@ app.use(cookie())
 
 app.listen(port,()=>{
     console.log(`Server is running on ${port}`);
-    
+    DBconnect()
 })
