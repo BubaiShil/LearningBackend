@@ -4,24 +4,21 @@ import mongoose from "mongoose";
 const CompanyScehma = new mongoose.Schema({
     name : {
         type : String,
-        required : true
+        required : true,
+        unique : true
     },
     description : {
-        type : String,
-        required : true
+        type : String
     },
     location : {
-        type : String,
-        required : true
+        type : String
     },
     userId : {
         type : mongoose.Schema.Types.ObjectId,
-        ref : "User",
-        required : true
+        ref : "User"
     },
     website : {
         type : String,
-        required : true
     },
     logo : {
         type : String,

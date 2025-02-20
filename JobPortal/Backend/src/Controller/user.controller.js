@@ -1,4 +1,5 @@
 import { User } from "../Models/user.model.js";
+import {getToken} from '../Utils/Token.js'
 import bcrypt from "bcryptjs";
 
 export const Signup = async (req, res) => {
@@ -71,7 +72,7 @@ export const Login = async (req, res) => {
         .json({ message: "Account does'nt exits with current user" });
     }
 
-    genToken(user._id,res);
+    getToken(user._id,res);
 
     res.status(200).json({
       _id: user._id,
@@ -93,4 +94,30 @@ export const Logout = async (req,res)=>{
         console.log("error in logout controller", error);
         res.status(400).json({ message: "internal server error" });
       }
+}
+
+
+export const updateProfile = async(req,res)=>{
+  const {fullName,email,bio,skill} =req.body
+
+  try {
+    const updateData = {}
+
+    if (fullName) updateData.fullName = fullName;
+  if (email) updateData.email = email;
+  if (bio) updateData.bio = bio;
+  if (skill) updateData.skills = skill.split(","); 
+
+    const userId = req.user._id
+
+    const update = await User.findByIdAndUpdate(userId,{$set : updateData},{ new: true, runValidators: true })
+
+    if (!update) {
+      return res.status(404).json({ success: false, message: "User not found" });
+    }
+
+    res.status(200).json({ success: true, update });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
 }
