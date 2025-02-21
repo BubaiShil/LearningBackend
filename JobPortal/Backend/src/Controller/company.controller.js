@@ -15,7 +15,7 @@ export const Register=async(req,res)=>{
 
         const createCompany = await Company.create({  //create does'nt need save() || new Company({}) need save()
             name,
-            userId : req.id
+            userId : req.user._id
         })
 
         res.status(200).json({
@@ -31,7 +31,7 @@ export const Register=async(req,res)=>{
 
 export const getCompany = async(req,res)=>{
     try {
-        const userId = req.id /// only getting particular user company not other
+        const userId = req.user._id /// only getting particular user company not other
         const company = await Company.find({userId})  //find need object ,since re.id is not obj so we wrap with {}
 
         if (!company) {
