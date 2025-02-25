@@ -4,6 +4,9 @@ import bcrypt from "bcryptjs";
 
 export const Signup = async (req, res) => {
   const { fullName, email, password, role } = req.body;
+  const file = req.file
+  console.log(fullName, email, password, role);
+  
 
   try {
     if (!fullName || !email || !password || !role) {
@@ -119,5 +122,15 @@ export const updateProfile = async(req,res)=>{
     res.status(200).json({ success: true, update });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
+  }
+}
+
+
+export const chechAuth = (req,res) =>{
+  try {
+    res.status(200).json(req.user)
+  } catch (error) {
+    console.log("error in checkauth", error);
+    res.status(400).json({ message: "internal server error" });
   }
 }

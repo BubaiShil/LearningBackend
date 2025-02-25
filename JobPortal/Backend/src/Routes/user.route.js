@@ -1,13 +1,14 @@
 import express from "express";
-import { Login, Logout, Signup, updateProfile } from "../Controller/user.controller.js";
+import { chechAuth, Login, Logout, Signup, updateProfile } from "../Controller/user.controller.js";
 import { protectRoute } from "../middleware/auth.middleware.js";
+import { upload } from "../middleware/multer.middleware.js"; // ✅ Correct import
 
-const router = express.Router()
+const router = express.Router();
 
+router.post("/signup", upload.single("file"), Signup); // ✅ Correct usage
+router.post("/login", Login);
+router.post("/logout", Logout);
+router.put("/update-profile", protectRoute, updateProfile);
+router.get("/check", protectRoute, chechAuth);
 
-router.post('/signup',Signup)
-router.post('/login',Login)
-router.post('/logout',Logout)
-router.put('/update-profile',protectRoute,updateProfile)
-
-export default router
+export default router;

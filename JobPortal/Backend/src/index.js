@@ -1,6 +1,7 @@
 import express from 'express'
 import cookie from 'cookie-parser'
 import dotenv from 'dotenv'
+import cors from 'cors'
 import authRoutes from './Routes/user.route.js'
 import companyRoutes from './Routes/commpany.route.js'
 import jobRoutes from './Routes/job.route.js'
@@ -12,6 +13,10 @@ const app = express();
 const port = process.env.PORT;
 app.use(express.json())
 app.use(cookie())
+app.use(cors({
+    origin : 'http://localhost:5173',
+    credentials : true
+}))
 
 
 
