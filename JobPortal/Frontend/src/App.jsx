@@ -10,15 +10,18 @@ import LoginPage from './Pages/LoginPage'
 import { useAuthStore } from './Store/useAuthStore'
 import { Loader } from 'lucide-react'
 import { Toaster } from 'react-hot-toast'
+import Jobs from './Pages/Jobs'
 
 function App() {
-  const [count, setCount] = useState(0)
+  //const [count, setCount] = useState(0)
   const {authCheck,isCheckingAuth,authUser} = useAuthStore()
 
 
   useEffect(() => {
+    console.log("Running authCheckinapp...");
     authCheck();
-  }, [authCheck]);
+  }, [authCheck]); // ✅ Runs only once on mount
+  
 
 
   if (isCheckingAuth && !authUser) 
@@ -36,9 +39,10 @@ function App() {
       <Navbar/>
 
       <Routes>
-        <Route path='/' element={!authUser ? <HomePage/> : <Navigate to='/login'/>}/>
+        <Route path='/' element={authUser ? <HomePage/> : <Navigate to='/login'/>}/>
         <Route path='/signup' element={!authUser ? <SignupPage/> : <Navigate to='/'/>}/>
         <Route path='/login' element={!authUser ? <LoginPage/> : <Navigate to='/'/>}/>
+        <Route path='/jobs' element={authUser ? <Jobs/> : <Navigate to='/'/>}/>
       </Routes>
 
       <Toaster/>

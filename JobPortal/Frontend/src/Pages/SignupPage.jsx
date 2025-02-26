@@ -1,4 +1,4 @@
-import { useAuthStore } from "@/Store/useAuthStore";
+import { useAuthStore } from "../Store/useAuthStore.js";
 import { Eye, EyeOff, Mail, MessageSquare, User, Lock, Camera } from "lucide-react";
 import React, { useState } from "react";
 import toast from "react-hot-toast";
@@ -82,7 +82,7 @@ const SignupPage = () => {
                 placeholder="John Doe"
                 value={formData.fullName}
                 onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
-                required
+                // required
               />
             </div>
           </div>
@@ -102,7 +102,7 @@ const SignupPage = () => {
                 placeholder="you@example.com"
                 value={formData.email}
                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                required
+                // required
               />
             </div>
           </div>
@@ -122,7 +122,7 @@ const SignupPage = () => {
                 placeholder="••••••••"
                 value={formData.password}
                 onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                required
+                // required
               />
               <button
                 type="button"

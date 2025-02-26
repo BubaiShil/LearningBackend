@@ -6,20 +6,37 @@ export const useAuthStore = create((set) => ({
   authUser: null,
   isCheckingAuth: true,
   isSigningUp: false,
+  isLogining: false,
 
+
+  // authCheck: async () => {
+  //   try {
+  //     const res = await axiosInstance.get("/user/check");
+  //     set({ authUser: res.data });
+  //   } catch (error) {
+  //     console.log("error in CheckAuth", error);
+  //     set({ authUser: null });
+  //   } finally {
+  //     set({ isCheckingAuth: false });
+  //   }
+  // },
   authCheck: async () => {
+    console.log("Running authCheck...");
     try {
-      const res = await axiosInstance.get("/user/check");
+      const res = await axiosInstance.get("/user/check", { withCredentials: true });
       set({ authUser: res.data });
+      //console.log("Auth check response:", res.data);
     } catch (error) {
-      console.log("error in CheckAuth", error);
+      //console.log("error in CheckAuth", error);
       set({ authUser: null });
     } finally {
       set({ isCheckingAuth: false });
     }
   },
+  
 
   signup: async (data) => {
+    console.log("Running signup...");
     set({ isSigningUp: true });
   
     try {
@@ -31,11 +48,28 @@ export const useAuthStore = create((set) => ({
       }
     } catch (error) {
       set({ authUser: null });
-  
-      // Show error message from API response or default message
       toast.error(error.response?.data?.message || "Signup failed");
     } finally {
       set({ isSigningUp: false });
+    }
+  },
+
+  login: async (data) => {
+    console.log("Running login...");
+    set({ isLogining: true });
+  
+    try {
+      const res = await axiosInstance.post("/user/login", data);
+  
+      
+        set({ authUser: res.data });
+        toast.success("Account LoggedIn Successfully!");
+     
+    } catch (error) {
+      set({ authUser: null });
+      toast.error(error.response?.data?.message || "Signup failed");
+    } finally {
+      set({ isLogining: false });
     }
   },
   

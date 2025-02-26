@@ -5,7 +5,7 @@ import bcrypt from "bcryptjs";
 export const Signup = async (req, res) => {
   const { fullName, email, password, role } = req.body;
   const file = req.file
-  console.log(fullName, email, password, role);
+  //console.log(fullName, email, password, role,file);
   
 
   try {
@@ -30,8 +30,9 @@ export const Signup = async (req, res) => {
     });
 
     if (createUser) {
-      getToken(createUser._id,res);
       await createUser.save();
+      getToken(createUser._id,res);
+      
 
       res.status(201).json({
         _id: createUser._id,
@@ -69,11 +70,10 @@ export const Login = async (req, res) => {
 
     //   const role = await User.findOne({role})
 
-    if (role !== user.role) {
-      return res
-        .status(400)
-        .json({ message: "Account does'nt exits with current user" });
+    if (!user || !isPassCorrect || user.role !== role) {
+      return res.status(400).json({ message: "Invalid credentials" });
     }
+    
 
     getToken(user._id,res);
 

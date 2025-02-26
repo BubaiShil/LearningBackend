@@ -1,8 +1,9 @@
+import { useAuthStore } from "@/Store/useAuthStore";
 import { Briefcase, Home, LogOut, User, Menu } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const Navbar = () => {
-  const isAuthenticated = false; // Change this to `true` to simulate logged-in state
+  const {authUser} = useAuthStore(); // Change this to `true` to simulate logged-in state
 
   return (
     <div className="navbar bg-base-100 shadow-md fixed w-full z-40">
@@ -19,26 +20,30 @@ const Navbar = () => {
 
         {/* Navigation Links (Hidden on Mobile) */}
         <div className="hidden md:flex gap-6">
+          <Link to='/'>
           <button className="btn btn-ghost btn-sm flex items-center gap-1">
             <Home size={18} /> Home
           </button>
+          </Link>
+          <Link to='/jobs'>
           <button className="btn btn-ghost btn-sm flex items-center gap-1">
             <Briefcase size={18} /> Jobs
           </button>
+          </Link>
         </div>
 
         {/* User Actions */}
         <div className="flex items-center gap-3">
-          {isAuthenticated ? (
+          {authUser ? (
             // If logged in: Show user dropdown
             <div className="dropdown dropdown-end">
               <button tabIndex={0} className="btn btn-ghost btn-sm flex gap-2 items-center">
                 <div className="avatar">
                   <div className="w-8 rounded-full">
-                    <img src="https://via.placeholder.com/40" alt="User Avatar" />
+                    <img src={authUser.profile.resume} alt="User Avatar" /> ///////////////////////////////
                   </div>
                 </div>
-                <span className="hidden sm:inline">John Doe</span>
+                <span className="hidden sm:inline">{authUser.fullName}</span>
               </button>
 
               {/* Dropdown Menu */}
