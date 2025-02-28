@@ -30,6 +30,11 @@ const Navbar = () => {
             <Briefcase size={18} /> Jobs
           </button>
           </Link>
+          <Link to='/browser'>
+          <button className="btn btn-ghost btn-sm flex items-center gap-1">
+            <Briefcase size={18} /> Browse
+          </button>
+          </Link>
         </div>
 
         {/* User Actions */}
@@ -40,7 +45,7 @@ const Navbar = () => {
               <button tabIndex={0} className="btn btn-ghost btn-sm flex gap-2 items-center">
                 <div className="avatar">
                   <div className="w-8 rounded-full">
-                    <img src={authUser.profile.resume} alt="User Avatar" /> ///////////////////////////////
+                    <img src="" alt="User Avatar" /> ///////////////////////////////
                   </div>
                 </div>
                 <span className="hidden sm:inline">{authUser.fullName}</span>
@@ -49,9 +54,11 @@ const Navbar = () => {
               {/* Dropdown Menu */}
               <ul tabIndex={0} className="dropdown-content z-[50] menu p-2 shadow bg-base-100 rounded-lg w-44 border">
                 <li>
+                <Link to='/profile'>
                   <button className="flex items-center gap-2">
                     <User size={18} /> Profile
                   </button>
+                  </Link>
                 </li>
                 <li>
                   <button className="flex items-center gap-2 text-error">

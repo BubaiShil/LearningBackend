@@ -7,6 +7,7 @@ export const useAuthStore = create((set) => ({
   isCheckingAuth: true,
   isSigningUp: false,
   isLogining: false,
+  isUpdateProfile: false,
 
 
   // authCheck: async () => {
@@ -67,10 +68,38 @@ export const useAuthStore = create((set) => ({
      
     } catch (error) {
       set({ authUser: null });
-      toast.error(error.response?.data?.message || "Signup failed");
+      toast.error(error.response?.data?.message || "Login failed");
     } finally {
       set({ isLogining: false });
     }
   },
+
+  updateProfile: async (data) => {
+    if (!data) {
+      toast.error("Invalid data provided");
+      return;
+    }
+  
+    console.log("Running update...");
+    set({ isUpdateProfile: true });
+  
+    try {
+      const res = await axiosInstance.put("/user/update-profile", data);
+      
+      if (res.data && res.data.success) {
+        set({ authUser: res.data.user });  // ✅ Ensure updated user data is stored
+        toast.success("Profile Updated Successfully!");
+      } else {
+        throw new Error("No data received from server");
+      }
+    } catch (error) {
+      console.error("Update profile error:", error);
+      toast.error(error.response?.data?.message || "Update failed");
+    } finally {
+      set({ isUpdateProfile: false });
+    }
+  },
+  
+
   
 }));

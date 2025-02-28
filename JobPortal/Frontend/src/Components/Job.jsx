@@ -1,9 +1,10 @@
-import { useNavigate } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 //import { BookmarkIcon } from "@heroicons/react/24/outline"; // Heroicons for Bookmark
 import { BookmarkPlusIcon } from "lucide-react";
 
 const Job = () => {
-  //const navigate = useNavigate();
+  const navigate = useNavigate();
+  const jobId = "cndvbt3cqwe3qerc"
 
   return (
     <div className="p-5 rounded-md shadow-xl bg-white border border-gray-100">
@@ -46,7 +47,8 @@ const Job = () => {
 
       {/* Buttons */}
       <div className="flex items-center gap-4 mt-4">
-        <button  className="btn btn-outline">
+       
+        <button onClick={()=>navigate(`/JobDetails/${jobId}`)} className="btn btn-outline">
           Details
         </button>
         <button className="btn btn-primary">Save For Later</button>

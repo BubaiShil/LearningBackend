@@ -100,30 +100,54 @@ export const Logout = async (req,res)=>{
 }
 
 
-export const updateProfile = async(req,res)=>{
-  const {fullName,email,bio,skill} =req.body
+export const updateProfile = async (req, res) => {
+  const { fullName, email, bio, skill, resume } = req.body;
 
   try {
-    const updateData = {}
+    console.log("Received update request:", req.body); // Debugging log
+
+    const updateData = {};
 
     if (fullName) updateData.fullName = fullName;
-  if (email) updateData.email = email;
-  if (bio) updateData.bio = bio;
-  if (skill) updateData.skills = skill.split(","); 
+    if (email) updateData.email = email;
 
-    const userId = req.user._id
+    if (bio || skill || resume) {
+      updateData.profile = {};
+      if (bio) updateData.profile.bio = bio;
+      if (skill) updateData.profile.skills = skill.split(",").map(s => s.trim());
+      if (resume) updateData.profile.resume = resume;
+    }
 
-    const update = await User.findByIdAndUpdate(userId,{$set : updateData},{ new: true, runValidators: true })
+    console.log("Update data prepared:", updateData); // Debugging log
 
-    if (!update) {
+    const userId = req.user?._id; // Ensure `req.user` exists
+    if (!userId) {
+      console.error("User ID not found in request.");
+      return res.status(401).json({ success: false, message: "Unauthorized request" });
+    }
+
+    console.log("Updating user with ID:", userId);
+
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      { $set: updateData },
+      { new: true, runValidators: true }
+    );
+
+    if (!updatedUser) {
+      console.error("User not found for ID:", userId);
       return res.status(404).json({ success: false, message: "User not found" });
     }
 
-    res.status(200).json({ success: true, update });
+    console.log("User updated successfully:", updatedUser);
+
+    res.status(200).json({ success: true, user: updatedUser });
   } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
+    console.error("Error in updateProfile:", error);
+    res.status(500).json({ success: false, message: "Internal server error", error: error.message });
   }
-}
+};
+
 
 
 export const chechAuth = (req,res) =>{

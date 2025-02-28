@@ -11,6 +11,9 @@ import { useAuthStore } from './Store/useAuthStore'
 import { Loader } from 'lucide-react'
 import { Toaster } from 'react-hot-toast'
 import Jobs from './Pages/Jobs'
+import Browse from './Pages/Browse'
+import Profile from './Pages/Profile'
+import JobDetails from './Pages/JobDetails'
 
 function App() {
   //const [count, setCount] = useState(0)
@@ -43,6 +46,9 @@ function App() {
         <Route path='/signup' element={!authUser ? <SignupPage/> : <Navigate to='/'/>}/>
         <Route path='/login' element={!authUser ? <LoginPage/> : <Navigate to='/'/>}/>
         <Route path='/jobs' element={authUser ? <Jobs/> : <Navigate to='/'/>}/>
+        <Route path='/browser' element={authUser ? <Browse/> : <Navigate to='/'/>}/>
+        <Route path='/profile' element={authUser ? <Profile/> : <Navigate to='/'/>}/>
+        <Route path='/JobDetails/:id' element={authUser ? <JobDetails/> : <Navigate to='/'/>}/>
       </Routes>
 
       <Toaster/>
