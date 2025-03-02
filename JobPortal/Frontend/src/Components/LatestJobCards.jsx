@@ -26,7 +26,7 @@ const LatestJobCards = ({ job }) => {
           {job?.position} Positions
         </div>
         <div className="badge badge-outline text-red-500 font-medium">
-          {job?.jobType}
+          {job?.jobtype}
         </div>
         <div className="badge badge-outline text-purple-600 font-medium">
           {job?.salary} LPA

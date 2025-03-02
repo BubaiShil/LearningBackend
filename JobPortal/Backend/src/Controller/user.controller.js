@@ -1,53 +1,69 @@
 import { User } from "../Models/user.model.js";
+import getDataUri from "../Utils/datauri.js";
 import {getToken} from '../Utils/Token.js'
 import bcrypt from "bcryptjs";
 
+import cloudinary from "../Utils/cloudinary.js";
+import fs from "fs";
+
 export const Signup = async (req, res) => {
   const { fullName, email, password, role } = req.body;
-  const file = req.file
-  //console.log(fullName, email, password, role,file);
-  
+  const file = req.file; // Get uploaded file
 
   try {
     if (!fullName || !email || !password || !role) {
       return res.status(400).json({ message: "Enter all the fields" });
     }
 
-    const user = await User.findOne({ email });
+    const existingUser = await User.findOne({ email });
 
-    if (user) {
-      return res.status(400).json({ message: "This email already exits" });
+    if (existingUser) {
+      return res.status(400).json({ message: "This email already exists" });
     }
 
     const salt = await bcrypt.genSalt();
     const hashedPassword = await bcrypt.hash(password, salt);
 
-    const createUser = new User({
+    let profilePicUrl = ""; // Default empty URL
+
+    if (file) {
+      // Upload the image to Cloudinary
+      const result = await cloudinary.uploader.upload(file.path, {
+        folder: "profile_pictures",
+      });
+      profilePicUrl = result.secure_url;
+
+      // Remove the local file after upload
+      fs.unlinkSync(file.path);
+    }
+
+    const newUser = new User({
       fullName,
       email,
       password: hashedPassword,
       role,
+      profile: {
+        // resume : ////   todo/////////////////////////
+        profilePic: profilePicUrl, // Save Cloudinary URL
+      },
     });
 
-    if (createUser) {
-      await createUser.save();
-      getToken(createUser._id,res);
-      
+    await newUser.save();
+    getToken(newUser._id, res);
 
-      res.status(201).json({
-        _id: createUser._id,
-        fullName: createUser.fullName,
-        email: createUser.email,
-        role: createUser.role,
-      });
-    } else {
-      res.status(400).json({ message: "Invalid user data" });
-    }
+    res.status(201).json({
+      _id: newUser._id,
+      fullName: newUser.fullName,
+      email: newUser.email,
+      role: newUser.role,
+      profilePic: newUser.profile.profilePic,
+    });
   } catch (error) {
-    console.log("error in sign controller", error);
-    res.status(400).json({ message: "internal server error" });
+    console.error("Error in Signup Controller:", error);
+    res.status(500).json({ message: "Internal Server Error" });
   }
 };
+
 
 export const Login = async (req, res) => {
   const { email, password, role } = req.body;
@@ -81,7 +97,6 @@ export const Login = async (req, res) => {
       _id: user._id,
       fullName: user.fullName,
       email: user.email,
-      profile: user.profile,
     });
   } catch (error) {
     console.log("error in login controller", error);
@@ -100,53 +115,144 @@ export const Logout = async (req,res)=>{
 }
 
 
+
 export const updateProfile = async (req, res) => {
-  const { fullName, email, bio, skill, resume } = req.body;
-
   try {
-    console.log("Received update request:", req.body); // Debugging log
+    const { fullName, email, bio, skill } = req.body;
+    const file = req.file; // Uploaded file
+    
+    //console.log("🔹 Received update request:", req.body);
 
-    const updateData = {};
-
-    if (fullName) updateData.fullName = fullName;
-    if (email) updateData.email = email;
-
-    if (bio || skill || resume) {
-      updateData.profile = {};
-      if (bio) updateData.profile.bio = bio;
-      if (skill) updateData.profile.skills = skill.split(",").map(s => s.trim());
-      if (resume) updateData.profile.resume = resume;
-    }
-
-    console.log("Update data prepared:", updateData); // Debugging log
-
-    const userId = req.user?._id; // Ensure `req.user` exists
+    const userId = req.user?._id;
     if (!userId) {
-      console.error("User ID not found in request.");
       return res.status(401).json({ success: false, message: "Unauthorized request" });
     }
 
-    console.log("Updating user with ID:", userId);
+    // Fetch existing user to retain `profilePic`
+    const existingUser = await User.findById(userId);
+    if (!existingUser) {
+      return res.status(404).json({ success: false, message: "User not found" });
+    }
 
+    const updateData = {};
+    
+    if (fullName) updateData.fullName = fullName;
+    if (email) updateData.email = email;
+
+    // Preserve existing profile and merge new values
+    updateData.profile = { ...existingUser.profile };
+
+    if (bio) updateData.profile.bio = bio;
+    if (skill) updateData.profile.skills = skill.split(",").map(s => s.trim());
+
+    // ✅ Handling file upload to Cloudinary
+    if (file) {
+      //console.log("📂 Uploading file to Cloudinary...");
+      const fileUri = getDataUri(file);
+      const cloudResponse = await cloudinary.uploader.upload(fileUri.content);
+
+      if (cloudResponse) {
+        updateData.profile.resume = cloudResponse.secure_url;
+        updateData.profile.resumerealName = file.originalname;
+      } else {
+        console.warn("⚠️ Cloudinary upload failed.");
+      }
+    }
+
+    // ✅ Updating user in database
     const updatedUser = await User.findByIdAndUpdate(
       userId,
       { $set: updateData },
       { new: true, runValidators: true }
     );
 
-    if (!updatedUser) {
-      console.error("User not found for ID:", userId);
-      return res.status(404).json({ success: false, message: "User not found" });
-    }
-
-    console.log("User updated successfully:", updatedUser);
-
     res.status(200).json({ success: true, user: updatedUser });
+
   } catch (error) {
-    console.error("Error in updateProfile:", error);
+    console.error("❌ Error in updateProfile:", error);
     res.status(500).json({ success: false, message: "Internal server error", error: error.message });
   }
 };
+
+
+// export const updateProfile = async (req, res) => {
+//   try {
+//     const { fullName, email, bio, skills } = req.body;
+//     const file = req.file; // Uploaded file (Profile Pic or Resume)
+
+//     console.log("🔹 Received update request:", req.body);
+//     console.log("📂 Received file:", file || "No file uploaded");
+
+//     const userId = req.user?._id;
+//     if (!userId) {
+//       return res.status(401).json({ success: false, message: "Unauthorized request" });
+//     }
+
+//     // Fetch existing user to retain existing profile data
+//     const existingUser = await User.findById(userId);
+//     if (!existingUser) {
+//       return res.status(404).json({ success: false, message: "User not found" });
+//     }
+
+//     const updateData = {
+//       fullName: fullName || existingUser.fullName,
+//       email: email || existingUser.email,
+//       profile: {
+//         ...existingUser.profile,
+//         bio: bio || existingUser.profile.bio,
+//         skills: skills ? skills.split(",").map((s) => s.trim()) : existingUser.profile.skills,
+//       },
+//     };
+
+//     // ✅ Handle file upload (Profile Picture or Resume)
+//     if (file) {
+//       console.log("📂 Uploading file to Cloudinary...");
+
+//       const allowedMimeTypes = ["image/jpeg", "image/png", "application/pdf", "application/msword", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"];
+
+//       if (!allowedMimeTypes.includes(file.mimetype)) {
+//         console.error("❌ Invalid file format:", file.mimetype);
+//         return res.status(400).json({ success: false, message: "Invalid file format" });
+//       }
+
+//       const fileUri = getDataUri(file);
+//       if (!fileUri || !fileUri.content) {
+//         console.error("❌ Error: fileUri is invalid or undefined.");
+//         return res.status(400).json({ success: false, message: "Invalid file format" });
+//       }
+
+//       try {
+//         const cloudResponse = await cloudinary.uploader.upload(fileUri.content);
+//         console.log("✅ Cloudinary Upload Success:", cloudResponse);
+
+//         if (cloudResponse?.secure_url) {
+//           if (file.mimetype.startsWith("image/")) {
+//             updateData.profile.profilePicture = cloudResponse.secure_url; // Update Profile Picture
+//           } else {
+//             updateData.profile.resume = cloudResponse.secure_url; // Update Resume
+//             updateData.profile.resumeRealName = file.originalname;
+//           }
+//         }
+//       } catch (uploadError) {
+//         console.error("❌ Cloudinary upload error:", uploadError);
+//         return res.status(500).json({ success: false, message: "File upload failed" });
+//       }
+//     }
+
+//     // ✅ Update user in database
+//     const updatedUser = await User.findByIdAndUpdate(
+//       userId,
+//       { $set: updateData },
+//       { new: true, runValidators: true }
+//     );
+
+//     res.status(200).json({ success: true, user: updatedUser });
+
+//   } catch (error) {
+//     console.error("❌ Error in updateProfile:", error);
+//     res.status(500).json({ success: false, message: "Internal server error", error: error.message });
+//   }
+// };
 
 
 

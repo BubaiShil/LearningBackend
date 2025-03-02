@@ -14,16 +14,18 @@ import Jobs from './Pages/Jobs'
 import Browse from './Pages/Browse'
 import Profile from './Pages/Profile'
 import JobDetails from './Pages/JobDetails'
+import { useJobStore } from './Store/useJobStore'
 
 function App() {
   //const [count, setCount] = useState(0)
   const {authCheck,isCheckingAuth,authUser} = useAuthStore()
-
+  const {jobs,getAllJobs} = useJobStore()
 
   useEffect(() => {
     console.log("Running authCheckinapp...");
     authCheck();
-  }, [authCheck]); // ✅ Runs only once on mount
+    getAllJobs()
+  }, [authCheck,getAllJobs]); // ✅ Runs only once on mount
   
 
 

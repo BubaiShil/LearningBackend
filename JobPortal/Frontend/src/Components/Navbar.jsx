@@ -1,9 +1,22 @@
-import { useAuthStore } from "@/Store/useAuthStore";
+import { useAuthStore } from "../Store/useAuthStore.js";
 import { Briefcase, Home, LogOut, User, Menu } from "lucide-react";
+import toast from "react-hot-toast";
 import { Link } from "react-router-dom";
 
 const Navbar = () => {
-  const {authUser} = useAuthStore(); // Change this to `true` to simulate logged-in state
+  const {authUser,logout} = useAuthStore(); // Change this to `true` to simulate logged-in state
+  //console.log("Profile Pic URL:", authUser?.profile?.profilePic);
+
+
+
+  const handleLogout=async()=>{
+    try {
+      await logout()
+    } catch (error) {
+      console.log("error in logout",error);
+      toast.error("Did'nt logout")
+    }
+  }
 
   return (
     <div className="navbar bg-base-100 shadow-md fixed w-full z-40">
@@ -45,7 +58,9 @@ const Navbar = () => {
               <button tabIndex={0} className="btn btn-ghost btn-sm flex gap-2 items-center">
                 <div className="avatar">
                   <div className="w-8 rounded-full">
-                    <img src="" alt="User Avatar" /> ///////////////////////////////
+                  <img src={authUser?.profile?.profilePic || "https://www.shutterstock.com/image-vector/circle-line-simple-design-logo-600nw-2174926871.jpg"} alt="User Avatar" />
+
+
                   </div>
                 </div>
                 <span className="hidden sm:inline">{authUser.fullName}</span>
@@ -61,7 +76,7 @@ const Navbar = () => {
                   </Link>
                 </li>
                 <li>
-                  <button className="flex items-center gap-2 text-error">
+                  <button onClick={handleLogout} className="flex items-center gap-2 text-error">
                     <LogOut size={18} /> Logout
                   </button>
                 </li>

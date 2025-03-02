@@ -168,7 +168,7 @@ const SignupPage = () => {
 
             {/* File Upload */}
             <div className="flex items-center gap-2">
-              <span className="label-text font-medium">Upload Resume:</span>
+              <span className="label-text font-medium">Upload ProfilePic:</span>
               <label
                 htmlFor="avatar-upload"
                 className="bg-base-content hover:scale-105 p-2 rounded-full cursor-pointer transition-all duration-200 flex items-center justify-center"
@@ -179,7 +179,7 @@ const SignupPage = () => {
                 type="file"
                 id="avatar-upload"
                 className="hidden"
-                accept="image/*"
+                accept="image/*" ///////////////
                 onChange={(e) => setFormData({ ...formData, file: e.target.files?.[0] })}
               />
             </div>

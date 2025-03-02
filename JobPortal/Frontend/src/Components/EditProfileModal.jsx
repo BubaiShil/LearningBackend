@@ -17,16 +17,28 @@ export const EditProfileModal = ({ isOpen, onClose }) => {
 
   const handleUpdateProfile = async(e)=>{
     e.preventDefault()
-    const updatedData = {
-        fullName: input.fullName,
-        email: input.email,
-        bio: input.bio,
-        skill: input.skills, // Pass as a comma-separated string, backend will handle split
-        resume: input.resume,
-      };
+    // const updatedData = {
+    //     fullName: input.fullName,
+    //     email: input.email,
+    //     bio: input.bio,
+    //     skill: input.skills, // Pass as a comma-separated string, backend will handle split
+    //     resume: input.resume,
+    //   };
     
-      await updateProfile(updatedData);
-      console.log("Updated data:", updatedData);
+    //   await updateProfile(updatedData);
+    //   console.log("Updated data:", updatedData);
+    const formData = new FormData();
+    formData.append("fullName", input.fullName);
+    formData.append("email", input.email);
+    formData.append("bio", input.bio);
+    formData.append("skills", input.skills);
+    
+    if (input.resume instanceof File) {
+      formData.append("file", input.resume);
+    }
+
+    await updateProfile(formData);
+    console.log("Updated data:", formData);
     
   }
 
