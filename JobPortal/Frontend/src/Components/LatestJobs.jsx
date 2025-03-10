@@ -1,6 +1,6 @@
 import React from "react";
 import LatestJobCards from "../Components/LatestJobCards";
-import { useJobStore } from "@/Store/useJobStore";
+import {useJobStore}  from "../Store/useJobStore.js";
 
 //const randomJobs = [1, 2, 3, 4, 5, 6, 7, 8];
 

@@ -1,3 +1,4 @@
+import toast from "react-hot-toast";
 import { axiosInstance } from "../lib/axios.js";
 import { create } from "zustand";
 
@@ -33,7 +34,34 @@ export const useJobStore = create((set)=>({
         } finally {
             set({ fetchingONEJob: false });
         }
-    }
+    },
+
+    applyJob : async(jobid,authUserId)=>{
+        //set({fetchingONEJob : true})
+
+        try {
+            const res = await axiosInstance.get(`/application/apply/${jobid}`)
+            console.log(res);
+            
+            toast.success(res.data.message);
+
+            set((state) => ({
+                setONEjob: {
+                    ...state.setONEjob,
+                    applications: [
+                        ...(state.setONEjob?.applications || []),
+                        { applicant: authUserId }
+                    ],
+                },
+            }));
+            
+        } catch (error) {
+            console.log("error in jobstore",error);
+            toast.error(error.response.data.message);
+        } 
+    },
 
 
 }))
+
+

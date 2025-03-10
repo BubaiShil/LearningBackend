@@ -1,6 +1,6 @@
 import FilterCard from "../Components/FilterCard";
 import Job from "@/Components/Job";
-import { useJobStore } from "@/Store/useJobStore";
+import {useJobStore}  from "../Store/useJobStore.js";
 import React from "react";
 
 //const jobarray = [1, 2, 3, 4, 5, 6, 7, 8];
