@@ -19,6 +19,7 @@ export const Register=async(req,res)=>{
         })
 
         res.status(200).json({
+            success: true, 
             message : "Created Company Successfully",
             createCompany
         })

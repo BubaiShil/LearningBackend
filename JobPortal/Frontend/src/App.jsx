@@ -12,6 +12,9 @@ import Profile from './Pages/Profile';
 import JobDetails from './Pages/JobDetails';
 import { useAuthStore } from './Store/useAuthStore';
 import { useJobStore } from './Store/useJobStore';
+import Company from './Pages/Company';
+import CreateCompany from './Pages/CreateCompany';
+import CompanyEdit from './Pages/CompanyEdit';
 
 function App() {
   const { authCheck, isCheckingAuth, authUser } = useAuthStore();
@@ -61,6 +64,11 @@ function App() {
           <Route path="/browser" element={authUser ? <Browse /> : <Navigate to="/" />} />
           <Route path="/profile" element={authUser ? <Profile /> : <Navigate to="/" />} />
           <Route path="/JobDetails/:id" element={authUser ? <JobDetails /> : <Navigate to="/" />} />
+
+          <Route path="/admin/companies" element={authUser ? <Company/> : <Navigate to="/" />} />
+          <Route path="/admin/jobs/create" element={authUser ? <CreateCompany/> : <Navigate to="/" />} />
+          <Route path="/admin/companies/:id" element={authUser ? <CompanyEdit/> : <Navigate to="/" />} />
+
         </Routes>
         <Toaster />
       </div>
