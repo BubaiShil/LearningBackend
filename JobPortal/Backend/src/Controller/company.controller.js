@@ -80,6 +80,7 @@ export const updateCompany = async(req,res)=>{
         }
 
         res.status(200).json({
+            success :true,
             message : "Company data updated",
             company
         })

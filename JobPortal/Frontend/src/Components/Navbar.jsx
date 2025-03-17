@@ -147,12 +147,12 @@ const Navbar = () => {
 
           { authUser && authUser?.role === "Recruiter" ? (
             <>
-              <Link to="/companies">
+              <Link to="/admin/companies">
                 <button className="btn btn-ghost btn-sm flex items-center gap-1">
                   <Building size={18} /> Companies
                 </button>
               </Link>
-              <Link to="/jobs">
+              <Link to="/admin/jobs">
                 <button className="btn btn-ghost btn-sm flex items-center gap-1">
                   <Briefcase size={18} /> Jobs
                 </button>

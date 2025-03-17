@@ -9,6 +9,7 @@ export const useJobStore = create((set)=>({
     fetchingALLJobs: false,
     fetchingONEJob: false,
     settingJobs : false,
+    adminJobs : [],
 
     getAllJobs : async()=>{
         set({fetchingJobs : true})
@@ -60,6 +61,17 @@ export const useJobStore = create((set)=>({
             toast.error(error.response.data.message);
         } 
     },
+
+
+    getAdminJob: async () => {
+        try {
+            const res = await axiosInstance.get('/job/adminJobs')
+            set({adminJobs : res.data.jobsbyAdmin})
+        } catch (error) {
+            console.log("error in adminJobs",error);
+            toast.error(error.response.data.message);
+        }
+    }
 
 
 }))

@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Navigate, Route, Routes } from 'react-router-dom';
+import { Navigate, Route, Routes, useParams } from 'react-router-dom';
 import { Loader } from 'lucide-react';
 import { Toaster } from 'react-hot-toast';
 import Navbar from './Components/Navbar';
@@ -15,10 +15,12 @@ import { useJobStore } from './Store/useJobStore';
 import Company from './Pages/Company';
 import CreateCompany from './Pages/CreateCompany';
 import CompanyEdit from './Pages/CompanyEdit';
+import AdminJobs from './Pages/AdminJobs';
 
 function App() {
   const { authCheck, isCheckingAuth, authUser } = useAuthStore();
   const { getAllJobs } = useJobStore();
+  // const { id } = useParams();
 
   // Run authCheck on component mount
   useEffect(() => {
@@ -67,7 +69,8 @@ function App() {
 
           <Route path="/admin/companies" element={authUser ? <Company/> : <Navigate to="/" />} />
           <Route path="/admin/jobs/create" element={authUser ? <CreateCompany/> : <Navigate to="/" />} />
-          <Route path="/admin/companies/:id" element={authUser ? <CompanyEdit/> : <Navigate to="/" />} />
+          <Route path="/admin/companies-update/:id" element={authUser ? <CompanyEdit/> : <Navigate to="/" />} />
+          <Route path="/admin/jobs" element={authUser ? <AdminJobs/> : <Navigate to="/" />} />
 
         </Routes>
         <Toaster />
