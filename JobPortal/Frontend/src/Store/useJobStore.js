@@ -71,6 +71,19 @@ export const useJobStore = create((set)=>({
             console.log("error in adminJobs",error);
             toast.error(error.response.data.message);
         }
+    },
+
+    jobPost: async (data) => {
+        try {
+            const res = await axiosInstance.post('/job/post',data)
+            set({adminJobs : res.data.jobCreate})
+            if (res?.data?.success) {
+                toast.success('Job Posted Succesfully')
+            }
+        } catch (error) {
+            console.log("error in postJobs",error);
+            toast.error(error.response.data.message);
+        }
     }
 
 

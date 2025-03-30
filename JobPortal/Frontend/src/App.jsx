@@ -16,6 +16,8 @@ import Company from './Pages/Company';
 import CreateCompany from './Pages/CreateCompany';
 import CompanyEdit from './Pages/CompanyEdit';
 import AdminJobs from './Pages/AdminJobs';
+import CreateJobs from './Pages/CreateJobs';
+import Applicants from './Pages/Applicants';
 
 function App() {
   const { authCheck, isCheckingAuth, authUser } = useAuthStore();
@@ -29,14 +31,14 @@ function App() {
   }, [authCheck]);
 
   // Re-run authCheck periodically (e.g., every 5 minutes)
-  useEffect(() => {
-    const interval = setInterval(() => {
-      console.log("Re-running authCheck...");
-      authCheck();
-    }, 5 * 60 * 1000); // 5 minutes
+  // useEffect(() => {
+  //   const interval = setInterval(() => {
+  //     console.log("Re-running authCheck...");
+  //     authCheck();
+  //   }, 5 * 60 * 1000); // 5 minutes
 
-    return () => clearInterval(interval); // Cleanup interval on unmount
-  }, [authCheck]);
+  //   return () => clearInterval(interval); // Cleanup interval on unmount
+  // }, [authCheck]);
 
   // Fetch jobs if the user is authenticated
   useEffect(() => {
@@ -68,9 +70,11 @@ function App() {
           <Route path="/JobDetails/:id" element={authUser ? <JobDetails /> : <Navigate to="/" />} />
 
           <Route path="/admin/companies" element={authUser ? <Company/> : <Navigate to="/" />} />
-          <Route path="/admin/jobs/create" element={authUser ? <CreateCompany/> : <Navigate to="/" />} />
+          <Route path="/admin/companies/create" element={authUser ? <CreateCompany/> : <Navigate to="/" />} />
           <Route path="/admin/companies-update/:id" element={authUser ? <CompanyEdit/> : <Navigate to="/" />} />
           <Route path="/admin/jobs" element={authUser ? <AdminJobs/> : <Navigate to="/" />} />
+          <Route path="/admin/jobs/create" element={authUser ? <CreateJobs/> : <Navigate to="/" />} />
+          <Route path="/admin/jobs/:id/applicants" element={authUser ? <Applicants/> : <Navigate to="/" />} />
 
         </Routes>
         <Toaster />

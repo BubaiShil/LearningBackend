@@ -32,10 +32,13 @@ import { useCompanyStore } from "@/Store/useCompanyStore";
 
 const Company = () => {
   const { getCompanies, companies} = useCompanyStore();
-  getCompanies();
   const navigate = useNavigate();
   const [input, setInput] = useState("");
   const [filtered, setFiltered] = useState(companies)
+
+  useEffect(() => {
+    getCompanies();
+  }, []);
 
   useEffect(() => {
     const filterres = companies.filter(company=> 
@@ -56,9 +59,9 @@ const Company = () => {
         />
         <button
           className="btn btn-primary"
-          onClick={() => navigate("/admin/jobs/create")}
+          onClick={() => navigate("/admin/companies/create")}
         >
-          New Jobs
+          New Company
         </button>
       </div>
 

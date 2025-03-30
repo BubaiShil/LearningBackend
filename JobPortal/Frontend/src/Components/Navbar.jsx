@@ -109,7 +109,7 @@ import { Loader } from "lucide-react";
 
 const Navbar = () => {
   const { authUser, logout, isCheckingAuth } = useAuthStore();
-  console.log("Navbar authUser:", authUser); // Debugging
+  // console.log("Navbar authUser:", authUser); // Debugging
 
   const handleLogout = async () => {
     try {
