@@ -8,7 +8,8 @@ const ApplicationSchema = new mongoose.Schema({
     },
     status :{
         type : String,
-        enum : ["accepted","rejected","pending"]
+        enum : ["accepted","rejected","pending"],
+        default:'pending'
     },
     applicant :{
         type : mongoose.Schema.Types.ObjectId,

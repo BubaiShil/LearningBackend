@@ -2,50 +2,17 @@ import { useApplicantsStore } from "@/Store/useApplicantsStore";
 import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
 
-// Demo Data
-// const applicants = {
-//   applications: [
-//     {
-//       _id: "1",
-//       applicant: {
-//         fullname: "John Doe",
-//         email: "johndoe@example.com",
-//         phoneNumber: "+1234567890",
-//         profile: {
-//           resume: "https://example.com/resume.pdf",
-//           resumeOriginalName: "John_Doe_Resume.pdf",
-//         },
-//         createdAt: "2024-03-28T12:00:00Z",
-//       },
-//     },
-//     {
-//       _id: "2",
-//       applicant: {
-//         fullname: "Jane Smith",
-//         email: "janesmith@example.com",
-//         phoneNumber: "+1987654321",
-//         profile: {
-//           resume: "",
-//           resumeOriginalName: "",
-//         },
-//         createdAt: "2024-03-27T14:30:00Z",
-//       },
-//     },
-//   ],
-// };
+
 
 //Demo shortlisting statuses
-const shortlistingStatus = ["Pending", "Shortlisted", "Rejected"];
+const shortlistingStatus = ["accepted","rejected","pending"];
 
-// Dummy handler function
-const statusHandler = (status, id) => {
-  console.log(`Status "${status}" updated for applicant ID: ${id}`);
-};
+
 
 const Applicants = () => {
 
   const params = useParams()
-  const {applicants,getApplicants} = useApplicantsStore()
+  const {applicants,getApplicants,setStatus} = useApplicantsStore()
   console.log(applicants);
   
 
@@ -57,6 +24,14 @@ const Applicants = () => {
         
     }
   }, [])
+
+  const handleSetStatus=async(statusId,status)=>{
+    try {
+       await setStatus(statusId,status)
+    } catch (error) {
+        console.log("err in setstatus");
+    }
+  }
   
 
 
@@ -75,7 +50,7 @@ const Applicants = () => {
             <tr className="bg-gray-100 text-gray-700">
               <th className="px-4 py-3 text-left">Full Name</th>
               <th className="px-4 py-3 text-left">Email</th>
-              <th className="px-4 py-3 text-left">Contact</th>
+              {/* <th className="px-4 py-3 text-left">Contact</th> */}
               <th className="px-4 py-3 text-left">Resume</th>
               <th className="px-4 py-3 text-left">Date</th>
               <th className="px-4 py-3 text-right">Action</th>
@@ -84,9 +59,9 @@ const Applicants = () => {
           <tbody>
             {applicants?.applications?.map((item) => (
               <tr key={item._id} className="hover:bg-gray-50">
-                <td className="px-4 py-3">{item?.applicant?.fullname}</td>
+                <td className="px-4 py-3">{item?.applicant?.fullName}</td>
                 <td className="px-4 py-3">{item?.applicant?.email}</td>
-                <td className="px-4 py-3">{item?.applicant?.phoneNumber}</td>
+                {/* <td className="px-4 py-3">{item?.applicant?.phoneNumber}</td> */}
                 <td className="px-4 py-3">
                   {item.applicant?.profile?.resume ? (
                     <a
@@ -111,7 +86,7 @@ const Applicants = () => {
                       {shortlistingStatus.map((status, index) => (
                         <li key={index}>
                           <button
-                            onClick={() => statusHandler(status, item?._id)}
+                            onClick={() => handleSetStatus(item?._id,status)}
                             className="w-full text-left px-4 py-2 hover:bg-gray-100"
                           >
                             {status}

@@ -124,20 +124,26 @@ export const updateStatus = async (req,res) => {
             })
         };
 
-        const application = await Application.findOne({_id : applicationId})
-        if(!application){
-            return res.status(404).json({
-                message:"Application not found.",
-                success:false
-            })
-        };
+        const application = await Application.findByIdAndUpdate(
+            applicationId,
+            { status: status.toLowerCase() },
+            { new: true } // ✅ Returns updated document
+        );
 
-        application.status = status.toLowerCase();
-        await application.save();
+        // console.log(application);
+        
+
+        if (!application) {
+            return res.status(404).json({
+                message: "Application not found.",
+                success: false
+            });
+        }
 
         return res.status(200).json({
-            message:"Status updated successfully.",
-            success:true
+            message: "Status updated successfully.",
+            success: true,
+            // application // ✅ Return updated application for debugging
         });
 
     } catch (error) {
