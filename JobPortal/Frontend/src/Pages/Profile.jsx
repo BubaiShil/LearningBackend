@@ -154,14 +154,22 @@
 
 import { useAuthStore } from "@/Store/useAuthStore";
 import { Camera, Mail, User, Pen, Phone } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { EditProfileModal } from "@/Components/EditProfileModal";
 import { Loader } from "lucide-react";
+import { useApplicantsStore } from "@/Store/useApplicantsStore";
 
 const Profile = () => {
   const { authUser, isCheckingAuth } = useAuthStore();
+  const {getAppliedJob,appliedJobs} = useApplicantsStore()
   const [isModalOpen, setIsModalOpen] = useState(false);
   console.log("Profile authUser:", authUser); // Debugging
+
+
+  useEffect(() => {
+   getAppliedJob()
+  }, [])
+  
 
   if (isCheckingAuth) {
     return (
@@ -170,6 +178,10 @@ const Profile = () => {
       </div>
     );
   }
+
+  console.log(appliedJobs);
+  
+
 
   return (
     <div className="h-full min-h-screen pt-16 bg-gray-50 flex justify-center">
@@ -263,30 +275,18 @@ const Profile = () => {
               </tr>
             </thead>
             <tbody>
-              <tr className="border-t">
-                <td className="p-3">2024-02-15</td>
-                <td className="p-3">Frontend Developer</td>
-                <td className="p-3">TechCorp</td>
+              { appliedJobs.map((item)=>(
+                <tr className="border-t">
+                <td className="p-3">{item?.createdAt?.split("T")[0]}</td>
+                <td className="p-3">{item?.job?.title}</td>
+                <td className="p-3">{item?.job?.company?.name}</td>
                 <td className="p-3 text-right">
-                  <span className="px-3 py-1 bg-green-400 text-white rounded-md text-sm">ACCEPTED</span>
+                  <span className={`px-3 py-1 ${item?.status === 'accepted' ?  'bg-green-400' : item.status === 'rejected' ? 'bg-red-400' : 'bg-gray-400' } text-white rounded-md text-sm`}>{item?.status}</span>
                 </td>
               </tr>
-              <tr className="border-t">
-                <td className="p-3">2024-02-10</td>
-                <td className="p-3">Backend Developer</td>
-                <td className="p-3">CodeWave</td>
-                <td className="p-3 text-right">
-                  <span className="px-3 py-1 bg-gray-400 text-white rounded-md text-sm">PENDING</span>
-                </td>
-              </tr>
-              <tr className="border-t">
-                <td className="p-3">2024-01-25</td>
-                <td className="p-3">UI/UX Designer</td>
-                <td className="p-3">DesignHub</td>
-                <td className="p-3 text-right">
-                  <span className="px-3 py-1 bg-red-400 text-white rounded-md text-sm">REJECTED</span>
-                </td>
-              </tr>
+              ))
+              
+}
             </tbody>
           </table>
         </div>
