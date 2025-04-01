@@ -1,28 +1,45 @@
 import toast from "react-hot-toast";
 import { axiosInstance } from "../lib/axios.js";
 import { create } from "zustand";
+// import { useCompanyStore } from "./useCompanyStore.js";
+import { useCompanyStore } from "./useCompanyStore";
 
+// const {setSettingQuery} = useCompanyStore()
 
-export const useJobStore = create((set)=>({
+export const useJobStore = create((set,get)=>({
     jobs: [],
     setONEjob: null,
     fetchingALLJobs: false,
     fetchingONEJob: false,
     settingJobs : false,
     adminJobs : [],
+    settingQuery: "",  // ✅ Add this to state
+    setSettingQuery: (query) => set({ settingQuery: query }),
 
-    getAllJobs : async()=>{
-        set({fetchingJobs : true})
-
+    getAllJobs: async () => {
+        const { settingQuery } = get();
+      
+        set({ fetchingJobs: true });
+      
         try {
-            const res = await axiosInstance.get('/job/get')
-            set({ jobs: res.data.jobs });
+          let url = "/job/get";  // Default URL to fetch all jobs
+      
+          if (settingQuery) {
+            url += `?keyword=${settingQuery}`; // Append query if it exists
+          }
+      
+          const res = await axiosInstance.get(url);
+          console.log("API Response:", res.data);  // Debugging log
+      
+          set({ jobs: res.data.jobs });
         } catch (error) {
-            toast.error(error.response.data.message);
+          console.error("Error fetching jobs:", error);
+          toast.error(error.response?.data?.message || "Something went wrong");
         } finally {
-            set({ fetchingJobs: false });
+          set({ fetchingJobs: false });
         }
-    },
+      },
+      
 
     getSingleJob : async(id)=>{
         set({fetchingONEJob : true})

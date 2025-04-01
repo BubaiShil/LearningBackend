@@ -1,13 +1,17 @@
 import FilterCard from "../Components/FilterCard";
 import Job from "@/Components/Job";
 import {useJobStore}  from "../Store/useJobStore.js";
-import React from "react";
+import React, { useEffect } from "react";
 
 //const jobarray = [1, 2, 3, 4, 5, 6, 7, 8];
 
 const Jobs = () => {
 
   const {jobs,getAllJobs} = useJobStore()
+  // useEffect(() => {
+  //  getAllJobs()
+  // }, [])
+  
   return (
     <div className="max-w-7xl mx-auto ">
       <div className="flex gap-5 ">

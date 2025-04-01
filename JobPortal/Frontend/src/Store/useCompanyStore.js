@@ -9,6 +9,8 @@ export const useCompanyStore = create((set) => ({
 
   singleCompany: null,
   companies : [],
+ 
+  
   
 
   setSingleCompany: async (companyName,navigate) => {

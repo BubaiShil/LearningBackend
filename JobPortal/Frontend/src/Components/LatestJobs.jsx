@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import LatestJobCards from "../Components/LatestJobCards";
 import {useJobStore}  from "../Store/useJobStore.js";
 
@@ -7,6 +7,14 @@ import {useJobStore}  from "../Store/useJobStore.js";
 const LatestJobs = () => {
   //const { allJobs } = useSelector((store) => store.job);
   const {jobs,getAllJobs} = useJobStore()
+
+  useEffect(() => {
+    getAllJobs(); // Fetch jobs when the component mounts
+  }, [getAllJobs]);
+
+  console.log(jobs);
+  
+ 
 
   return (
     <div className="max-w-7xl mx-auto my-20 px-4">
