@@ -1,4 +1,6 @@
+import { useJobStore } from "@/Store/useJobStore";
 import { Filter } from "lucide-react"; // Lucide Filter icon
+import { useEffect, useState } from "react";
 
 const filterData = [
   {
@@ -16,6 +18,18 @@ const filterData = [
 ];
 
 const FilterCard = () => {
+  const {setSettingQuery} = useJobStore()
+  const [selectedVal, setSelectedVal] = useState("");
+
+  const handleValue = (val) => {
+    console.log("Selected Value:", val.target.value); // ✅ Debug
+    setSelectedVal(val.target.value);
+  };
+
+  useEffect(() => {
+    setSettingQuery(selectedVal);
+  }, [selectedVal,setSettingQuery]);
+
   return (
     <div className="w-full bg-white p-5 rounded-lg shadow-md border border-gray-200">
       {/* Header */}
@@ -29,12 +43,25 @@ const FilterCard = () => {
       {filterData.map((data, index) => (
         <div key={index} className="mb-4">
           <h1 className="font-semibold text-md mb-2">{data.filterType}</h1>
-          {data.array.map((item, idx) => (
-            <label key={idx} className="flex items-center gap-2 cursor-pointer">
-              <input type="radio" name={data.filterType} className="radio radio-sm radio-primary" />
-              <span className="text-sm text-gray-700">{item}</span>
-            </label>
-          ))}
+          {data.array.map((item, idx) => {
+            const itemId = `id${index} - ${idx}`;
+            return (
+              <label
+                key={idx}
+                className="flex items-center gap-2 cursor-pointer"
+              >
+                <input
+                  type="radio"
+                  // id={itemId}
+                  name={data.filterType}
+                  value={item}
+                  onChange={handleValue}
+                  className="radio radio-sm radio-primary"
+                />
+                <span className="text-sm text-gray-700">{item}</span>
+              </label>
+            );
+          })}
         </div>
       ))}
     </div>

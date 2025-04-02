@@ -1,12 +1,14 @@
 import { Link, Navigate, useNavigate } from "react-router-dom";
 //import { BookmarkIcon } from "@heroicons/react/24/outline"; // Heroicons for Bookmark
 import { BookmarkPlusIcon } from "lucide-react";
+import { useEffect } from "react";
 
-
-const Job = ({job}) => {
-  // const {jobs,getAllJobs} = useJobStore()
+const Job = ({ job }) => {
+  // const { jobs, getAllJobs} = useJobStore();
   const navigate = useNavigate();
   //const jobId = "cndvbt3cqwe3qerc"
+
+  
 
   return (
     <div className="p-5 rounded-md shadow-xl bg-white border border-gray-100">
@@ -14,7 +16,7 @@ const Job = ({job}) => {
       <div className="flex items-center justify-between">
         <p className="text-sm text-gray-500">
           {/* {daysAgoFunction(job?.createdAt) === 0 ? "Today" : `${daysAgoFunction(job?.createdAt)} days ago`} */}
-        {job.createdAt.split('T')[0]}
+          {job.createdAt.split("T")[0]}
         </p>
         <button className="btn btn-outline btn-circle">
           <BookmarkPlusIcon className="h-5 w-5" />
@@ -44,13 +46,17 @@ const Job = ({job}) => {
       <div className="flex items-center gap-2 mt-4">
         <div className="badge badge-outline badge-primary"> {job.position}</div>
         <div className="badge badge-outline badge-error">{job.jobtype}</div>
-        <div className="badge badge-outline badge-secondary">{job.salary} LPA</div>
+        <div className="badge badge-outline badge-secondary">
+          {job.salary} LPA
+        </div>
       </div>
 
       {/* Buttons */}
       <div className="flex items-center gap-4 mt-4">
-       
-        <button onClick={()=>navigate(`/JobDetails/${job._id}`)} className="btn btn-outline">
+        <button
+          onClick={() => navigate(`/JobDetails/${job._id}`)}
+          className="btn btn-outline"
+        >
           Details
         </button>
         <button className="btn btn-primary">Save For Later</button>
