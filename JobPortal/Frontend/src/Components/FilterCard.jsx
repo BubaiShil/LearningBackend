@@ -48,11 +48,12 @@ const FilterCard = () => {
             return (
               <label
                 key={idx}
+
                 className="flex items-center gap-2 cursor-pointer"
               >
                 <input
                   type="radio"
-                  // id={itemId}
+                  id={itemId}
                   name={data.filterType}
                   value={item}
                   onChange={handleValue}

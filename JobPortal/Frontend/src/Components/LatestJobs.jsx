@@ -9,7 +9,7 @@ const LatestJobs = () => {
   const {jobs,getAllJobs} = useJobStore()
 
   useEffect(() => {
-    getAllJobs(); // Fetch jobs when the component mounts
+    getAllJobs(); 
   }, [getAllJobs]);
 
   console.log(jobs);
@@ -18,12 +18,12 @@ const LatestJobs = () => {
 
   return (
     <div className="max-w-7xl mx-auto my-20 px-4">
-      {/* Heading */}
+      
       <h1 className="text-4xl font-bold text-center md:text-left">
         <span className="text-[#6A38C2]">Latest & Top</span> Job Openings
       </h1>
 
-      {/* Job Cards Grid */}
+      
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 my-8">
         {jobs.length <= 0 ? (
           <div className="text-gray-600 text-center col-span-full">
