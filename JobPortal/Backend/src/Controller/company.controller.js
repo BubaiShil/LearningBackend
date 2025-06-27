@@ -3,7 +3,7 @@ import { Company } from "../Models/company.model.js"
 export const Register=async(req,res)=>{
     
     try {
-        const {name} = req.body
+        const {name,description,location,website} = req.body
         if(!name){
             return res.status(400).json({message : "Company Name required"})
         }
@@ -15,6 +15,9 @@ export const Register=async(req,res)=>{
 
         const createCompany = await Company.create({  //create does'nt need save() || new Company({}) need save()
             name,
+            description,
+            location,
+            website,
             userId : req.user._id
         })
 

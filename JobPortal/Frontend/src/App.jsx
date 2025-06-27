@@ -19,6 +19,7 @@ import AdminJobs from './Pages/AdminJobs';
 import CreateJobs from './Pages/CreateJobs';
 import Applicants from './Pages/Applicants';
 
+
 function App() {
   const { authCheck, isCheckingAuth, authUser } = useAuthStore();
   const { getAllJobs } = useJobStore();
@@ -72,8 +73,10 @@ function App() {
           <Route path="/admin/companies" element={authUser ? <Company/> : <Navigate to="/" />} />
           <Route path="/admin/companies/create" element={authUser ? <CreateCompany/> : <Navigate to="/" />} />
           <Route path="/admin/companies-update/:id" element={authUser ? <CompanyEdit/> : <Navigate to="/" />} />
+          {/* <Route path="/admin/job-update/:id" element={authUser ? <JobEdit/> : <Navigate to="/" />} /> */}
           <Route path="/admin/jobs" element={authUser ? <AdminJobs/> : <Navigate to="/" />} />
-          <Route path="/admin/jobs/create" element={authUser ? <CreateJobs/> : <Navigate to="/" />} />
+          {/* <Route path="/admin/jobs/create" element={authUser ? <CreateJobs/> : <Navigate to="/" />} /> */}
+          <Route path="/admin/jobs/create/:id?" element={authUser ? <CreateJobs/> : <Navigate to="/" />} />
           <Route path="/admin/jobs/:id/applicants" element={authUser ? <Applicants/> : <Navigate to="/" />} />
 
         </Routes>

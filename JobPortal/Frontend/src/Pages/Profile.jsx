@@ -255,9 +255,10 @@ const Profile = () => {
             <a
               target="_blank"
               href={authUser?.profile?.resume}
+              //href={authUser.profile.resume.replace('/raw/upload/', '/raw/upload/fl_inline/')}
               className="text-blue-500 hover:underline cursor-pointer"
             >
-              resume.pdf
+              {authUser?.profile?.resumerealName || "View Resume (PDF)"}
             </a>
           </div>
         </div>

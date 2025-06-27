@@ -8,8 +8,8 @@ export const EditProfileModal = ({ isOpen, onClose }) => {
 
   const [input, setInput] = useState({
     fullName: authUser?.fullName || "",
-    email: authUser?.email || "",
-    bio: authUser?.profile?.bio || "",
+    email: authUser?.email || "", 
+    bio: authUser?.profile?.bio || "", 
     skills: authUser?.profile?.skills?.join(", ") || "",
     resume: authUser?.profile?.resume || "",
   });
@@ -121,7 +121,7 @@ export const EditProfileModal = ({ isOpen, onClose }) => {
               <input
                 id="file"
                 type="file"
-                accept="image/*"
+                accept=".pdf"
                 onChange={(e)=>setInput({...input,resume: e.target.files?.[0]})}
                 className="file-input file-input-bordered w-full"
               />

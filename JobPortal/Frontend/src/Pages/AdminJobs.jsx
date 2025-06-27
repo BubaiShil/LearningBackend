@@ -1,10 +1,14 @@
 import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { MoreHorizontal, Edit2, Eye } from "lucide-react";
 import { useJobStore } from "@/Store/useJobStore";
 
 const AdminJobs = () => {
   const { getAdminJob, adminJobs } = useJobStore();
+  // const params =  useParams()
+  // const JobId = params.id
+  
   const navigate = useNavigate();
   const [input, setInput] = useState("");
   const [filtered, setFiltered] = useState([]);
@@ -33,7 +37,7 @@ const AdminJobs = () => {
         />
         <button
           className="btn bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700"
-          onClick={() => navigate("/admin/jobs/create")}
+          onClick={() => navigate(`/admin/jobs/create`)}
         >
           New Job
         </button>
@@ -78,7 +82,7 @@ const AdminJobs = () => {
                         <li className="border-b">
                           <button
                             onClick={() =>
-                              navigate(`/admin/companies-update/${job._id}`)
+                              navigate(`/admin/jobs/create/${job._id}`)
                             }
                             className="flex items-center gap-2 px-4 py-2 w-full hover:bg-gray-100"
                           >

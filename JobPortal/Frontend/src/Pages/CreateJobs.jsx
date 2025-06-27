@@ -1,16 +1,29 @@
 import { useCompanyStore } from "@/Store/useCompanyStore";
 import { useJobStore } from "@/Store/useJobStore";
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import AdminJobs from "./AdminJobs";
 
 const CreateJobs = () => {
   const { companies, getCompanies } = useCompanyStore();
-  const {jobPost} = useJobStore()
+  const params = useParams()
+  const jobId = params.id
+  const {jobPost,getAdminJob,jobs} = useJobStore()
   const navigate = useNavigate()
 
+  console.log(jobs);
+  
+
+
+console.log("companie :", companies);
+
+
+
   useEffect(() => {
+    
     getCompanies();
-  }, []);
+    getAdminJob()
+  }, [getAdminJob , getCompanies]);
 
   console.log(companies);
 
@@ -25,6 +38,40 @@ const CreateJobs = () => {
     position: 0,
     company: "",
   });
+
+
+  useEffect(() => {
+        if (jobs.length > 0 && jobId) {
+            const foundJob = jobs.find(job => job._id === jobId);
+            if (foundJob) {
+                // Manually set singleCompany here if your store doesn't do it directly from getCompanies
+                // Or simply use foundCompany to populate the form
+                setInput({
+                    title: foundJob.title || "",
+                    description: foundJob.description || "",
+                    salary: foundJob.salary || "",
+                    location: foundJob.location || "",
+                    //file: null // File input cannot be pre-filled
+                });
+            }
+        }
+    }, [jobs, jobId]); // Depend on companies and companyId
+
+    // This useEffect is kept as a fallback/alternative if singleCompany is populated elsewhere
+    // but the above useEffect will now be the primary method for populating on refresh.
+    // If you always intend to use the `companies` array to find the current one, you can remove this.
+    // useEffect(() => {
+    //     if (singleCompany) {
+    //         setFormData({
+    //             name: singleCompany?.name || "",
+    //             description: singleCompany?.description || "",
+    //             website: singleCompany?.website || "",
+    //             location: singleCompany?.location || "",
+    //             file: null
+    //         });
+    //     }
+    // }, [singleCompany]);
+  
 
   const handleCompany = (value) => {
     const selectedCompany = companies.find(
@@ -42,6 +89,7 @@ const CreateJobs = () => {
     try {
       await jobPost(input)
       console.log("job 2 data ",input);
+      
       
       navigate('/admin/jobs')
     } catch (error) {

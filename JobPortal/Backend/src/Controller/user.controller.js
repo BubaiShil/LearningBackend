@@ -271,16 +271,43 @@ import getDataUri from "../Utils/datauri.js";
 import { getToken } from '../Utils/Token.js';
 import bcrypt from "bcryptjs";
 import cloudinary from "../Utils/cloudinary.js";
-import fs from "fs";
+import fs from "fs/promises";
+import path from "path";
 
 // Helper function to handle file uploads to Cloudinary
 const uploadToCloudinary = async (file) => {
-  const fileUri = getDataUri(file);
-  const result = await cloudinary.uploader.upload(fileUri.content, {
-    folder: "profile_pictures",
-  });
-  fs.unlinkSync(file.path); // Remove the local file after upload
-  return result.secure_url;
+  // const fileUri = getDataUri(file);
+  // const result = await cloudinary.uploader.upload(fileUri.content, {
+  //   folder: "profile_pictures",
+  // });
+  // fs.unlinkSync(file.path); // Remove the local file after upload
+  // return result.secure_url;
+
+
+   try {
+        if (!file || !file.path) {
+            console.error("File or file path is missing for Cloudinary upload.");
+            throw new Error("File data not available for upload.");
+        }
+
+        const fileBuffer = await fs.readFile(file.path);
+        const extName = path.extname(file.originalname).toString(); // This should be like ".pdf"
+        const dataUri = getDataUri(fileBuffer, extName); // This function creates the Data URI
+
+        const result = await cloudinary.uploader.upload(dataUri.content, {
+            resource_type: 'raw',
+            format: extName.substring(1) // <--- CRITICAL CHANGE: Explicitly set the format (e.g., 'pdf')
+            // You can also add a folder if you want: folder: 'resumes'
+        });
+
+        console.log("Cloudinary returned secure_url (with format added):", result.secure_url); // Keep this log!
+
+        await fs.unlink(file.path); // You can uncomment this now, as files are confirmed to be saving
+        return result.secure_url;
+    } catch (error) {
+        console.error("Error in uploadToCloudinary:", error);
+        throw error;
+    }
 };
 
 // Signup Controller
@@ -393,45 +420,42 @@ export const Logout = async (req, res) => {
 
 // Update Profile Controller
 export const updateProfile = async (req, res) => {
-  try {
+   try {
     const { fullName, email, bio, skills } = req.body;
-    const file = req.file; // Uploaded file (Profile Pic or Resume)
-    const userId = req.user?._id;
+    const file = req.file; 
+    const userId = req.user?._id; 
 
-    // Validate user ID
     if (!userId) {
       return res.status(401).json({ success: false, message: "Unauthorized request" });
     }
 
-    // Fetch existing user
     const existingUser = await User.findById(userId);
     if (!existingUser) {
       return res.status(404).json({ success: false, message: "User not found" });
     }
 
-    // Prepare update data
     const updateData = {
       fullName: fullName || existingUser.fullName,
       email: email || existingUser.email,
       profile: {
         ...existingUser.profile,
         bio: bio || existingUser.profile.bio,
-        skills: skills ? skills.split(",").map((s) => s.trim()) : existingUser.profile.skills,
+        skills: skills 
+          ? skills.split(",").map((s) => s.trim()) 
+          : existingUser.profile.skills,
       },
     };
 
-    
     if (file) {
-      const fileUrl = await uploadToCloudinary(file);
-      if (file.mimetype.startsWith("image/")) {
-        updateData.profile.profilePic = fileUrl; 
+      if (file.mimetype === "application/pdf") {
+        const resumeUrl = await uploadToCloudinary(file);
+        updateData.profile.resume = resumeUrl;
+        updateData.profile.resumerealName  = file.originalname;
       } else {
-        updateData.profile.resume = fileUrl; 
-        updateData.profile.resumeRealName = file.originalname;
+        return res.status(400).json({ success: false, message: "Resume upload: Only PDF files are allowed." });
       }
     }
 
-    // Update user in database
     const updatedUser = await User.findByIdAndUpdate(
       userId,
       { $set: updateData },
@@ -439,6 +463,7 @@ export const updateProfile = async (req, res) => {
     );
 
     res.status(200).json({ success: true, user: updatedUser });
+
   } catch (error) {
     console.error("Error in Update Profile Controller:", error);
     res.status(500).json({ success: false, message: "Internal Server Error" });
