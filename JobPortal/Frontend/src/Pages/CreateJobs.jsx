@@ -2,7 +2,7 @@ import { useCompanyStore } from "@/Store/useCompanyStore";
 import { useJobStore } from "@/Store/useJobStore";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import AdminJobs from "./AdminJobs";
+// import AdminJobs from "./AdminJobs";
 
 const CreateJobs = () => {
   const { companies, getCompanies } = useCompanyStore();

@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Navigate, Route, Routes, useParams } from 'react-router-dom';
+import { Navigate, Route, Routes } from 'react-router-dom';
 import { Loader } from 'lucide-react';
 import { Toaster } from 'react-hot-toast';
 import Navbar from './Components/Navbar';

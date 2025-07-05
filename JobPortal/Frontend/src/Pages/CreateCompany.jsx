@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const CreateCompany = () => {
-    const {singleCompany,setSingleCompany} = useCompanyStore()
+    const {setSingleCompany} = useCompanyStore()
     const [input, setInput] = useState("")
   const navigate = useNavigate();
 

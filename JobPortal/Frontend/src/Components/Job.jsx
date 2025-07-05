@@ -1,7 +1,7 @@
-import { Link, Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 //import { BookmarkIcon } from "@heroicons/react/24/outline"; // Heroicons for Bookmark
 import { BookmarkPlusIcon } from "lucide-react";
-import { useEffect } from "react";
+// import { useEffect } from "react";
 
 const Job = ({ job }) => {
   // const { jobs, getAllJobs} = useJobStore();

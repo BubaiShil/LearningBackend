@@ -2,7 +2,7 @@ import toast from "react-hot-toast";
 import { axiosInstance } from "../lib/axios.js";
 import { create } from "zustand";
 // import { useCompanyStore } from "./useCompanyStore.js";
-import { useCompanyStore } from "./useCompanyStore";
+// import { useCompanyStore } from "./useCompanyStore";
 
 // const {setSettingQuery} = useCompanyStore()
 

@@ -1,5 +1,5 @@
-import Navbar from "../components/Navbar";
-import Job from "../components/Job";
+// import Navbar from "../components/Navbar";
+// import Job from "../components/Job";
 import { useJobStore } from "@/Store/useJobStore";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
