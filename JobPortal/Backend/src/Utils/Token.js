@@ -17,7 +17,7 @@ export const getToken = (userId, res) => {
         httpOnly: true,
         // sameSite : "strict",
         sameSite : process.env.NODE_ENV === "production" ? "None" : "Lax", 
-        secure: process.env.NODE_ENV !== "development",
+        secure: process.env.NODE_ENV === "production",
     });
 
     //console.log("Generated Token:", token);
